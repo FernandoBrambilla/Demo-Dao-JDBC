@@ -1,36 +1,34 @@
 package Model.dao.impl;
 
-import Model.dao.SellerDao;
+
+import Model.dao.DepartmentDao;
 import Model.entities.Department;
 import Model.entities.Seller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class SellerDaoJDBC implements SellerDao{
+public class DepartmentDaoJDBC implements DepartmentDao{
 
     //injeção de dependencia 
     private Connection connection;
-        public SellerDaoJDBC(Connection connection){
+        public DepartmentDaoJDBC(Connection connection){
             this. connection = connection;
         }
 
-    public SellerDaoJDBC() {
+    public DepartmentDaoJDBC() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     @Override
-    public void insert(Seller obj) {
+    public void insert(Department obj) {
        
     }
 
     @Override
-    public void update(Seller obj) {
+    public void update(Department obj) {
     }
 
     @Override
@@ -39,7 +37,7 @@ public class SellerDaoJDBC implements SellerDao{
 
     //localizar seller por Id
     @Override
-    public Seller findById(Integer id) {
+    public Department findById(Integer id) {
         PreparedStatement pstmt = null;
         ResultSet resultSet = null;
         try{
@@ -58,7 +56,7 @@ public class SellerDaoJDBC implements SellerDao{
                 //cria um obj seller
                 Seller seller = instanceSeller(resultSet, dept);
                 
-                return seller;
+                return dept;
             }
             return null;
         }
@@ -72,7 +70,7 @@ public class SellerDaoJDBC implements SellerDao{
     }
 
     @Override
-    public List<Seller> findAll() {
+    public List<Department> findAll() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -92,44 +90,6 @@ public class SellerDaoJDBC implements SellerDao{
         seller.setBirthDate(resultSet.getDate("BirthDate"));
         seller.setDepartment(dept);
         return seller;
-    }
-
-    @Override
-    public List<Seller> findByDepartment(Department department) {
-        PreparedStatement pstmt = null;
-        ResultSet resultSet = null;
-        try{
-            pstmt= connection.prepareStatement(
-                    "SELECT seller.*,department.name as DepName "
-                    +"FROM seller INNER JOIN department "
-                    +"ON seller.DepartmentID = department.Id "
-                    +"WHERE department.Id = ? "
-                    +"ORDER BY name");
-            pstmt.setInt(1, department.getId());
-            resultSet= pstmt.executeQuery();
-            List <Seller> sellerList = new ArrayList<>();
-            Map <Integer, Department> map = new HashMap<>();
-            while(resultSet.next()){
-                
-                //verifica se o depatamento ja existe na lista
-                Department dept = map.get(resultSet.getInt("DepartmentId"));
-                if(dept==null){
-                    //caso não haja, cria um objeto departamento
-                    dept= instanceDept(resultSet);
-                }
-                //cria um obj seller
-                Seller seller = instanceSeller(resultSet, dept);
-                sellerList.add(seller);
-            }
-            return sellerList;
-        }
-        catch(SQLException e){
-            throw new DataBaseConnection.DataBaseException(e.getMessage());
-        }
-        finally{
-            DataBaseConnection.DataBaseConnection.closeStatement(pstmt);
-            DataBaseConnection.DataBaseConnection.closeResultSet(resultSet);
-        }
     }
     
 }

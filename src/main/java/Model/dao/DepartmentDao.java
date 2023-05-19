@@ -3,7 +3,7 @@ package Model.dao;
 import Model.entities.Department;
 import java.util.List;
 
-public interface DepatmentDao {
+public interface DepartmentDao {
    
     void insert(Department obj);
     void update(Department obj);
