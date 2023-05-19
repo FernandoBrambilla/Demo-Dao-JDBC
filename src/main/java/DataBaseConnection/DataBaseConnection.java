@@ -5,8 +5,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataBaseConnection {
     
@@ -51,6 +55,28 @@ public class DataBaseConnection {
         }
     }
   
+    //close statement
+    public static void closeStatement(Statement stmt){
+        if(stmt!=null){
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                throw new DataBaseException(e.getMessage());
+            }
+        }
+    }
+    
+      //close resultSet
+    public static void closeResultSet(ResultSet rs){
+        if(rs!=null){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                throw new DataBaseException(e.getMessage());
+            }
+        }
+    }
+    
     
    
 }

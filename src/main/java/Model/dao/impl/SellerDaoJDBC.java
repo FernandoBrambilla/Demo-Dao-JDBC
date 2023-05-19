@@ -50,18 +50,10 @@ public class SellerDaoJDBC implements SellerDao{
             if(resultSet.next()){
                 
                 //cria um obj dept
-                Department dept = new Department();
-                dept.setId(resultSet.getInt("DepartmentId"));
-                dept.setName(resultSet.getString("DepName"));
+                Department dept = instanceDept(resultSet);
                 
                 //cria um obj seller
-                Seller seller = new Seller();
-                seller.setId(resultSet.getInt("Id"));
-                seller.setName(resultSet.getString("Name"));
-                seller.setEmail(resultSet.getString("Email"));
-                seller.setBaseSalary(resultSet.getDouble("BaseSalary"));
-                seller.setBirthDate(resultSet.getDate("BirthDate"));
-                seller.setDepartment(dept);
+                Seller seller = instanceSeller(resultSet, dept);
                 
                 return seller;
             }
@@ -71,14 +63,32 @@ public class SellerDaoJDBC implements SellerDao{
             throw new DataBaseConnection.DataBaseException(e.getMessage());
         }
         finally{
-            DataBaseConnection.DataBaseConnection.closeConnection();
-        
-    }
+            DataBaseConnection.DataBaseConnection.closeStatement(pstmt);
+            DataBaseConnection.DataBaseConnection.closeResultSet(resultSet);
+        }
     }
 
     @Override
     public List<Seller> findAll() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private Department instanceDept(ResultSet resultSet) throws SQLException {
+        Department dept= new Department();
+        dept.setId(resultSet.getInt("DepartmentId"));
+        dept.setName(resultSet.getString("DepName"));
+        return dept;
+    }
+    
+    private Seller instanceSeller(ResultSet resultSet, Department dept) throws SQLException{
+        Seller seller = new Seller();
+        seller.setId(resultSet.getInt("Id"));
+        seller.setName(resultSet.getString("Name"));
+        seller.setEmail(resultSet.getString("Email"));
+        seller.setBaseSalary(resultSet.getDouble("BaseSalary"));
+        seller.setBirthDate(resultSet.getDate("BirthDate"));
+        seller.setDepartment(dept);
+        return seller;
     }
     
 }
