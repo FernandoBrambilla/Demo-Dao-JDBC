@@ -90,7 +90,23 @@ public class SellerDaoJDBC implements SellerDao{
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
+        PreparedStatement pstmt = null;
+        ResultSet resultSet = null;
+        try{
+            pstmt= connection.prepareStatement(
+                "DELETE FROM seller "
+                +" WHERE id= ?");     
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){
+            throw new DataBaseConnection.DataBaseException(e.getMessage());
+        }
+        finally{
+            DataBaseConnection.DataBaseConnection.closeStatement(pstmt);
+            DataBaseConnection.DataBaseConnection.closeResultSet(resultSet);
+        }
     }
 
     //localizar seller por Id

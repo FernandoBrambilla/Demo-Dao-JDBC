@@ -32,16 +32,21 @@ public class Program {
         }
         
         System.out.println("-------teste 4 --------sellerInsert");
-        Seller sellerTest4 = new Seller(null, "nivaldo", "nivaldo@email.com", new Date(), 2000.0, dpt);
+        Seller sellerTest4 = new Seller(null, "Maria", "maria@email.com", new Date(), 2000.0, dpt);
         sellerDao.insert(sellerTest4);
         System.out.println(sellerTest4 + "id = "+ sellerTest4.getId());
-        
-        
-         System.out.println("-------teste 5 --------sellerUpdate");
+                
+        System.out.println("-------teste 5 --------sellerUpdate");
         Seller sellerTest5 = sellerDao.findById(2);
         sellerTest5.setName("Maria Salete");
         sellerDao.update(sellerTest5);
         System.out.println(sellerTest5);
+        
+        System.out.println("-------teste 6 --------sellerDelete");
+        sellerDao.deleteById(1);
+        System.out.println("Registro deletado com Sucesso");
+        
+        
         
     }
 }
