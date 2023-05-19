@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,40 @@ public class SellerDaoJDBC implements SellerDao{
     
     @Override
     public void insert(Seller obj) {
-       
+        PreparedStatement pstmt = null;
+        ResultSet resultSet = null;
+        try{
+            pstmt= connection.prepareStatement(
+                    " insert into seller "
+                    + "(`name`, email, birthDate, baseSalary, departmentId)"
+                    + " values  (?,?,?,?,?);",
+                    Statement.RETURN_GENERATED_KEYS);
+                   
+            pstmt.setString(1, obj.getName());
+            pstmt.setString(2, obj.getEmail());
+            pstmt.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+            pstmt.setDouble(4,obj.getBaseSalary());
+            pstmt.setInt(5,obj.getDepartment().getId());
+            int rowsAffected = pstmt.executeUpdate();
+            if(rowsAffected>0){
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if(rs.next()){
+                    int  id = rs.getInt(1);
+                    obj.setId(id);
+                }
+                DataBaseConnection.DataBaseConnection.closeResultSet(rs);
+            } 
+            else{
+                throw new DataBaseConnection.DataBaseException("Erro inesperado! Nenhum registro afetado.");
+            }
+        }
+        catch(SQLException e){
+            throw new DataBaseConnection.DataBaseException(e.getMessage());
+        }
+        finally{
+            DataBaseConnection.DataBaseConnection.closeStatement(pstmt);
+            DataBaseConnection.DataBaseConnection.closeResultSet(resultSet);
+        }
     }
 
     @Override

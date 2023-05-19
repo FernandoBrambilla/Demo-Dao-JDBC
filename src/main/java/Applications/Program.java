@@ -5,6 +5,7 @@ import Model.dao.DaoFactory;
 import Model.dao.SellerDao;
 import Model.entities.Department;
 import Model.entities.Seller;
+import java.util.Date;
 import java.util.List;
 
 public class Program {
@@ -19,7 +20,7 @@ public class Program {
         
        
         System.out.println("-------teste 2 --------findByDpt");
-        Department dpt = new Department(2, null);
+        Department dpt = new Department(4, null);
         List <Seller> sellerList = sellerDao.findByDepartment(dpt);
         for(Seller obj:sellerList){
             System.out.println(obj);
@@ -33,7 +34,10 @@ public class Program {
             System.out.println(obj);
         }
         
-        
+        System.out.println("-------teste 4 --------sellerInsert");
+        Seller sellers = new Seller(null, "nivaldo", "nivaldo@email.com", new Date(), 2000.0, dpt);
+        sellerDao.insert(sellers);
+        System.out.println(sellers + "id = "+ sellers.getId());
         
     }
 }
