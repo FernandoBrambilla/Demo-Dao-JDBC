@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class SellerDaoJDBC implements SellerDao{
 
-    //injeção de dependencia 
     private Connection connection;
         public SellerDaoJDBC(Connection connection){
             this. connection = connection;

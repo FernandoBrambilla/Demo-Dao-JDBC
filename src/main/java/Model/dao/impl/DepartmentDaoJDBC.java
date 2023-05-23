@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class DepartmentDaoJDBC implements DepartmentDao{
     
-    //injeção de dependencia 
+
     private Connection connection;
         public DepartmentDaoJDBC(Connection connection){
             this. connection = connection;
